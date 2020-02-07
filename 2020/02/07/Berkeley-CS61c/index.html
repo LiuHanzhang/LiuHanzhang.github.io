@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Liu Hanzhang">
+
+
+
+
+
+<title>Berkeley CS61c | Welcome to my notebook!</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Hanzhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Hanzhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Berkeley CS61c</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Liu Hanzhang</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 7, 2020&nbsp;&nbsp;11:19:10</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Notebook/">Notebook</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="C语言笔记"><a href="#C语言笔记" class="headerlink" title="C语言笔记"></a>C语言笔记</h1><h2 id="多文件编译"><a href="#多文件编译" class="headerlink" title="多文件编译"></a>多文件编译</h2><h3 id="规范方式"><a href="#规范方式" class="headerlink" title="规范方式"></a>规范方式</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">"hello.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    hello();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><span style="background-color:#FFFF00;"><code>h</code>文件中只放函数声明！</span></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//hello.h</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//hello.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">"hello.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Hello World\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc main.c hello.c -o main</span></span><br></pre></td></tr></table></figure>
+
+<p>或独立编译</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc -c main.c -o main.o</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> gcc -c hello.c -o hello.o</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> gcc hello.o main.o -o main</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="不规范方式"><a href="#不规范方式" class="headerlink" title="不规范方式"></a>不规范方式</h3><p>在IDE环境下，默认对<code>main.c</code>进行编译。这时可以在<code>main.c</code>中<code>#include&quot;xx.c&quot;</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//main.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">"hello.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">"hello.c"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    hello();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc main.c -o main</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Lecture-1-Intro"><a href="#Lecture-1-Intro" class="headerlink" title="Lecture 1: Intro"></a>Lecture 1: Intro</h1><img src="/2020/02/07/Berkeley-CS61c/image-20200118191814805.png" class="">
+
+<img src="/2020/02/07/Berkeley-CS61c/image-20200118191847346.png" class="">
+
+<img src="/2020/02/07/Berkeley-CS61c/image-20200118191928379.png" class="">
+
+<img src="/2020/02/07/Berkeley-CS61c/image-20200130125148326.png" class="">
+
+<h1 id="Lecture-5-C-Memory-Management"><a href="#Lecture-5-C-Memory-Management" class="headerlink" title="Lecture 5: C Memory Management"></a>Lecture 5: C Memory Management</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>C has 3 pool of memory</p>
+<ul>
+<li><strong>Static storage:</strong> global variable storage, basically permanent, entire program run</li>
+<li><strong>Stack:</strong> local variable storage, parameters, return address (location of “activation records” in Java or “stack frame” in C)</li>
+<li><strong>Heap:</strong> (dynamic malloc storage) data lives until deallocated by programmer </li>
+</ul>
+<img src="image-20200117133825373.png" alt="image-20200117133825373" style="zoom: 25%;" />
+
+<p>So A program’s <em>address space</em> contains 4 regions:</p>
+<ul>
+<li><strong>stack:</strong> local variables, grows downward</li>
+<li><strong>heap:</strong> space requested for pointers via <code>malloc()</code> in C or <code>new</code> in <code>C++</code> ; resizes dynamically, grows upward</li>
+<li><strong>static data:</strong> variables declared outside main, does not grow or shrink</li>
+<li><strong>code:</strong> loaded when program starts, does not change</li>
+</ul>
+<p><span style="background-color:#FFFF00;">Note that this is consistent with <em>MIPS memory map</em> shown below</span></p>
+<img src="image-20200117135047850.png" alt="image-20200117135047850" style="zoom: 25%;" />
+
+<h2 id="Heap-Management"><a href="#Heap-Management" class="headerlink" title="Heap Management"></a>Heap Management</h2><p>Managing the heap is tricky: memory can be allocated / deallocated at any time.</p>
+<h3 id="Requirements"><a href="#Requirements" class="headerlink" title="Requirements"></a>Requirements</h3><ul>
+<li>Want <code>malloc()</code> and <code>free()</code> to run quickly</li>
+<li>Want minimal memory overhead</li>
+<li>Want to avoid <strong>fragmentation</strong> - when most of free memory is in many small chunks. In this case we might have many free bytes but not able to satisfy a large request since the free bytes are not contiguous in memory. This is technically called <strong>external fragmentation</strong>.</li>
+</ul>
+<h3 id="Strategies"><a href="#Strategies" class="headerlink" title="Strategies"></a>Strategies</h3><p>If there are multiple free blocks of memory that are big enough for some request, how do we choose which one to use?</p>
+<ul>
+<li><strong>best-fit:</strong> choose the smallest block that is big enough for the request</li>
+<li><strong>first-fit:</strong> choose the first block we see that is big enough</li>
+<li><strong>next-fit:</strong> like first-fit but remember where we finished searching and resume searching from there</li>
+</ul>
+<p>The con of first-fit is that it results in many small blocks at the beginning of the free list</p>
+<p>The con of next-fit is it is slower than first-fit, since it takes longer in steady state to find a match</p>
+<p>The con of best-fit is that it leaves lots of tiny blocks</p>
+<h2 id="Stack-v-Heap-Declaration-of-Variables-v-Dynamic-Allocation"><a href="#Stack-v-Heap-Declaration-of-Variables-v-Dynamic-Allocation" class="headerlink" title="Stack v. Heap, Declaration of Variables v. Dynamic Allocation"></a>Stack v. Heap, Declaration of Variables v. Dynamic Allocation</h2><table>
+<thead>
+<tr>
+<th align="left"><strong>Parameter</strong></th>
+<th align="left"><strong>Stack</strong></th>
+<th align="left"><strong>Heap</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Type of data structures</td>
+<td align="left">A stack is a linear data structure.</td>
+<td align="left">Heap is a hierarchical data structure.</td>
+</tr>
+<tr>
+<td align="left">Access speed</td>
+<td align="left">High-speed access</td>
+<td align="left">Slower compared to stack</td>
+</tr>
+<tr>
+<td align="left">Space management</td>
+<td align="left">Space managed efficiently by OS so memory will never become fragmented.</td>
+<td align="left">Heap Space not used as efficiently. Memory can become fragmented as blocks of memory first allocated and then freed.</td>
+</tr>
+<tr>
+<td align="left">Access</td>
+<td align="left">Local variables only</td>
+<td align="left">It allows you to access variables globally.</td>
+</tr>
+<tr>
+<td align="left">Limit of space size</td>
+<td align="left"><span style="background-color:#FFFF00;">Limit on stack size dependent on OS.</span></td>
+<td align="left"><span style="background-color:#FFFF00;">Does not have a specific limit on memory size.</span></td>
+</tr>
+<tr>
+<td align="left">Resize</td>
+<td align="left">Variables cannot be resized</td>
+<td align="left">Variables can be resized.</td>
+</tr>
+<tr>
+<td align="left">Memory Allocation</td>
+<td align="left">Memory is allocated in a contiguous block.</td>
+<td align="left">Memory is allocated in any random order.</td>
+</tr>
+<tr>
+<td align="left">Allocation and Deallocation</td>
+<td align="left">Automatically done by compiler instructions.</td>
+<td align="left">It is manually done by the programmer.</td>
+</tr>
+<tr>
+<td align="left">Deallocation</td>
+<td align="left">Does not require to de-allocate variables.</td>
+<td align="left">Explicit de-allocation is needed.</td>
+</tr>
+<tr>
+<td align="left">Cost</td>
+<td align="left">Less</td>
+<td align="left">More</td>
+</tr>
+<tr>
+<td align="left">Implementation</td>
+<td align="left">A stack can be implemented in 3 ways simple array based, using dynamic memory, and Linked list based.</td>
+<td align="left">Heap can be implemented using array and trees.</td>
+</tr>
+<tr>
+<td align="left">Main Issue</td>
+<td align="left"><span style="background-color:#FFFF00;">Shortage of memory</span></td>
+<td align="left"><span style="background-color:#FFFF00;">Memory fragmentation</span></td>
+</tr>
+<tr>
+<td align="left">Locality of reference</td>
+<td align="left">Automatic compile time instructions.</td>
+<td align="left">Adequate</td>
+</tr>
+<tr>
+<td align="left">Flexibility</td>
+<td align="left">Fixed size</td>
+<td align="left">Resizing is possible</td>
+</tr>
+<tr>
+<td align="left">Access time</td>
+<td align="left">Faster</td>
+<td align="left">Slower</td>
+</tr>
+</tbody></table>
+<h3 id="Pros-of-Stack"><a href="#Pros-of-Stack" class="headerlink" title="Pros of Stack"></a>Pros of Stack</h3><ul>
+<li>Helps you to manage the data in a Last In First Out(LIFO) method which is not possible with Linked list and array.</li>
+<li>When a function is called the local variables are stored in a stack, and it is automatically destroyed once returned.</li>
+<li>A stack is used when a variable is not used outside that function.</li>
+<li>It allows you to control how memory is allocated and deallocated.</li>
+<li>Stack automatically cleans up the object.</li>
+<li>Not easily corrupted</li>
+<li>Variables cannot be resized.</li>
+</ul>
+<h3 id="Pros-of-Heap"><a href="#Pros-of-Heap" class="headerlink" title="Pros of Heap"></a>Pros of Heap</h3><ul>
+<li>Heap helps you to find the greatest and minimum number</li>
+<li>Garbage collection runs on the heap memory to free the memory used by the object.</li>
+<li>Heap method also used in the Priority Queue.</li>
+<li>It allows you to access variables globally.</li>
+<li>Heap doesn’t have any limit on memory size.</li>
+</ul>
+<h3 id="Cons-of-Stack"><a href="#Cons-of-Stack" class="headerlink" title="Cons of Stack"></a>Cons of Stack</h3><ul>
+<li>Stack memory is very limited.</li>
+<li>Creating too many objects on the stack can increase the risk of stack overflow.</li>
+<li>Random access is not possible.</li>
+<li>Variable storage will be overwritten, which sometimes leads to undefined behavior of the function or program.</li>
+<li>The stack will fall outside of the memory area, which might lead to an abnormal termination.</li>
+</ul>
+<h3 id="Cons-of-Heap"><a href="#Cons-of-Heap" class="headerlink" title="Cons of Heap"></a>Cons of Heap</h3><ul>
+<li>It can provide the maximum memory an OS can provide</li>
+<li>It takes more time to compute.</li>
+<li>Memory management is more complicated in heap memory as it is used globally.</li>
+<li>It takes too much time in execution compared to the stack.</li>
+</ul>
+<p>Refer to <a href="https://www.guru99.com/stack-vs-heap.html#4" target="_blank" rel="noopener">https://www.guru99.com/stack-vs-heap.html#4</a> for more information.</p>
+<h1 id="Lecture-6-Floating-Point"><a href="#Lecture-6-Floating-Point" class="headerlink" title="Lecture 6: Floating Point"></a>Lecture 6: Floating Point</h1><p><strong>Floating Point Representation</strong></p>
+<p>$$<br>1.xxxxxxx_2\times 2^{yyyy}<br>$$</p>
+<p>$xxxxxx$：尾数fraction</p>
+<p>$yyyy$: 指数exponent</p>
+<p>单精度浮点数，表示范围$\pm 2.0_{10}\times 10^{-38} - \pm 2.0_{10}\times 10^{38}$</p>
+<img src="/2020/02/07/Berkeley-CS61c/image-20200116125007125.png" class="">
+
+<p>双精度浮点数，表示范围$\pm 2.0_{10}\times 10^{-308} - \pm 2.0_{10}\times 10^{308}$</p>
+<img src="/2020/02/07/Berkeley-CS61c/image-20200116125430931.png" class="">
+
+<p><strong>IEEE 754 encoding of floating-point numbers:</strong></p>
+<img src="/2020/02/07/Berkeley-CS61c/image-20200116132533663.png" class="">
+
+<p>Denormalized number: no (implicit) leading 1, implicit exponent = -126</p>
+<p>因此，denormalized number表示范围从</p>
+<p>$$<br>\pm 0.000\ 000\ 000\ 000\ 000\ 000\ 000\ 01_2 \times 2^{-126} =\pm 2^{-149}<br>$$</p>
+<p>到</p>
+<p>$$<br>\pm 0.111\ 111\ 111\ 111\ 111\ 111\ 111\ 11_2 \times 2^{-126} = \pm(2^{-126}-2^{-149})<br>$$</p>
+<p><strong>Biased Notation:</strong></p>
+<p>$$<br>(-1)^s\times (1+{\rm Fraction}) \times 2^{\rm Exponent - Bias}<br>$$</p>
+<p>单精度的Bias为127，双精度的Bias为1023</p>
+<p>单精度的表示范围从</p>
+<p>$$<br>\pm 1.000\ 000\ 000\ 000\ 000\ 000\ 000\ 00_2 \times 2^{1-127}=\pm 2^{-126}\approx 1.175 \times 10^{-38}<br>$$</p>
+<p>到</p>
+<p>$$<br>\pm 1.111\ 111\ 111\ 111\ 111\ 111\ 111\ 11_2 \times 2^{254-126}\approx 2^{128}\approx3.403 \times 10^{38}<br>$$</p>
+<h1 id="RISC-V-vs-MIPS"><a href="#RISC-V-vs-MIPS" class="headerlink" title="RISC-V vs MIPS"></a>RISC-V vs MIPS</h1><blockquote>
+<p>我看到RISC V的指令第一印象可以概括为“像”。像什么呢？像MIPS（至少是在32位下）。指令的命名和功能很多都是一致的，能看懂MIPS汇编，RISC V汇编也能看个大概。通用寄存器的定义也是基本一致的，0号寄存器都是恒0源，其他的31个寄存器为通用寄存器。另外，RISC V的指令集编码里也有MIPS的影子，其Load指令funct3部分和MIPS同名指令的Opcode后三位编码完全一致。</p>
+<p>不过，再仔细看，又会发现RISC V的一些不同之处。</p>
+<p>MIPS的指令相对x86之流可以说是比较规则了，但是实际去做译码的话还是存在很多特例。比如，MIPS中指定该指令使用寄存器的段有<code>rs</code>、<code>rt</code>、<code>rd</code>，其中<code>rs</code>只可能读取，但<code>rt</code>和<code>rd</code>都可能是写入的对象，这让译码逻辑变得复杂。RISC V的指令编码更加规整，对应的段有<code>rs1</code>、<code>rs2</code>、<code>rd</code>，<code>rs1</code>和<code>rs2</code>都只用于读取，<code>rd</code>用于写入，几乎没有特例。不过，规整不可能是没有代价的，要不然MIPS早就做了。RISC V牺牲了立即数的宽度来保证指令格式的整体规整。RISC V中最长的立即数也不过20位，短的只有12位。而MIPS中立即数最长可以达到丧心病狂的28位（最低两位为自动填0），短的也有16位。同时，RISC V的J型指令和B型指令的立即数编码很鬼畜（评论区有用户给出了说明，非常感谢）不过，多了4位数字用于指令，RISC V很容易做得更加规则是比较明确的。</p>
+<p>此外，MIPS当年设计时，为了充分利用流水线，分支（Branch）指令带有一个延迟槽特性。这一特性在后来的发展中被证明意义不大，但为了保持兼容性还是传承了下来。RISC V的设计时间比较新，自然也摈弃了这一设计，指令更加简洁，</p>
+</blockquote>
+<p><a href="https://www.zhihu.com/question/28368960/answer/699535096" target="_blank" rel="noopener">https://www.zhihu.com/question/28368960/answer/699535096</a></p>
+<h1 id="Lecture-24-Cache"><a href="#Lecture-24-Cache" class="headerlink" title="Lecture 24: Cache"></a>Lecture 24: Cache</h1><h2 id="Typical-Memory-Hierarchy"><a href="#Typical-Memory-Hierarchy" class="headerlink" title="Typical Memory Hierarchy"></a>Typical Memory Hierarchy</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200130130245255.png" class="">
+
+<h2 id="Memory-Hierarchy-Basis"><a href="#Memory-Hierarchy-Basis" class="headerlink" title="Memory Hierarchy Basis"></a>Memory Hierarchy Basis</h2><p>Cache contains copies of data in memory that are being used.</p>
+<p>Memory contains copies of data on disk that are<br>being used.</p>
+<p>Caches work on the principles of temporal and spatial locality:</p>
+<ul>
+<li>Temporal Locality: If a memory location is referenced then it will tend to be referenced again soon =&gt; Keep most recently accessed data items closer to the processor</li>
+<li>Spatial Locality: If a memory location is referenced, the locations with nearby addresses will tend to be referenced soon =&gt; Move blocks consisting of contiguous words closer to the processor</li>
+</ul>
+<h2 id="How-is-the-Hierarchy-Managed"><a href="#How-is-the-Hierarchy-Managed" class="headerlink" title="How is the Hierarchy Managed?"></a>How is the Hierarchy Managed?</h2><ul>
+<li><p>registers ↔ memory</p>
+<p>By Compiler (or assembly level programmer)</p>
+</li>
+<li><p>cache ↔ main memory</p>
+<p>By the cache controller hardware</p>
+</li>
+<li><p>main memory ↔ disks (secondary storage)</p>
+<p>By the operating system (virtual memory)</p>
+<p>Virtual to physical address mapping assisted by the hardware (TLB)</p>
+<p>By the programmer (files)</p>
+</li>
+</ul>
+<img src="/2020/02/07/Berkeley-CS61c/image-20200130131520020.png" class="">
+
+<h2 id="Block-Size-Tradeoff"><a href="#Block-Size-Tradeoff" class="headerlink" title="Block Size Tradeoff"></a>Block Size Tradeoff</h2><p>Larger Block Size:</p>
+<p>+ Spatial Locality: if we access a given word, we’re likely to access other nearby words soon</p>
+<p>+ Very applicable with Stored-Program Concept</p>
+<p>+ Works well for sequential array accesses</p>
+<p>- Larger block size means larger miss penalty (on a miss, takes longer time to load a new block from next level)</p>
+<p>- If block size is too big relative to cache size, then there are too few blocks (Result: miss rate goes up)</p>
+<img src="/2020/02/07/Berkeley-CS61c/image-20200130173825687.png" class="">
+
+<h2 id="Optimize-Goal"><a href="#Optimize-Goal" class="headerlink" title="Optimize Goal"></a>Optimize Goal</h2><p>Minimize: Average Memory Access Time</p>
+<p>= Hit Time + Miss Penalty × Miss Rate</p>
+<p><span style="background-color:#FFFF00;">Create the illusion of a memory that is large, cheap, and fast - on average</span></p>
+<h2 id="Hit-and-Miss-Policies"><a href="#Hit-and-Miss-Policies" class="headerlink" title="Hit and Miss Policies"></a>Hit and Miss Policies</h2><p>The <a href="https://venus.cs61c.org" target="_blank" rel="noopener">Venus</a> cache simulator currently simulates a <strong>write-through, write-allocate</strong> cache. Here’s a reminder about the three different cache hit policies you should know about:</p>
+<ul>
+<li><strong>Write-back</strong> means that on a write hit, data is written to the cache only, and when this write happens, the dirty bit for the block that was written becomes 1. Writing to the cache is fast, so write latency in write-back caches is usually quite small. However, when a block is evicted from a write-back cache, if the dirty bit is 1, memory must be updated with the contents of that block, as it contains changes that are not yet reflected in memory. This makes write-back caches more difficult to implement in hardware.</li>
+<li><strong>Write-through</strong> means that on a write hit, data is written to both the cache and main memory. Writing to the cache is fast, but writing to main memory is slow; this makes write latency in write-through caches slower than in a write-back cache. However, write-through caches mean simpler hardware, since we can assume in write-through caches that memory always has the most up-to-date data.</li>
+<li><strong>Write-around</strong> means that in every situation, data is written to main memory only; if we have the block we’re writing in the cache, the valid bit of the block is changed to invalid. Essentially, there is no such thing as a write hit in a write-around cache; a write “hit” does the same thing as a write miss.</li>
+</ul>
+<p>There are also two miss policies you should know about:</p>
+<ul>
+<li><strong>Write-allocate</strong> means that on a write miss, you pull the block you missed on into the cache. For write-back, write-allocate caches, this can mean that memory is never written to directly; instead, writes are always to the cache and memory is updated upon eviction.</li>
+<li><strong>No write-allocate</strong> means that on a write miss, you do not pull the block you missed on into the cache. Only memory is updated.</li>
+</ul>
+<p>Additionally, in this course, we talk about several replacement policies, in order from most useful to least useful (normally):</p>
+<ul>
+<li><strong>LRU</strong> - Least recently used, when we decide to evict a cache block to make space, we select the block that has been used farthest back in time of all the other blocks.</li>
+<li><strong>Random</strong> - When we decide to evict a cache block to make space, we randomly select one of the blocks in the cache to evict.</li>
+<li><strong>MRU</strong> - Most recently used, when we decide to evict a cache block to make space, we select the block that has been used most recently of all the other available blocks.</li>
+</ul>
+<p>The important takeaway concerning Venus here: <strong>in a write-through cache (like in Venus), even though you are updating memory on writes, because we also write to the cache, we consider writes to blocks we have in the cache to be write hits.</strong></p>
+<p>Common question(s):</p>
+<ol>
+<li><strong>Don’t we usually pair write-back with write-allocate and write-through with no write-allocate?</strong> Yes, we learned in class that the ordinary pairing of hit policy/miss policy is write-back/write-allocate and write-through/no write allocate. However, with respect to the cache, write-through and write-back caches behave similarly on hits (both write to the cache), so the hit/miss patterns you see in the Venus cache simulator would be the same even if Venus simulated a write-back cache.</li>
+</ol>
+<h1 id="Lecture-27-Virtual-Memory"><a href="#Lecture-27-Virtual-Memory" class="headerlink" title="Lecture 27: Virtual Memory"></a>Lecture 27: Virtual Memory</h1><h2 id="Another-View-of-the-Memory-Hierarchy"><a href="#Another-View-of-the-Memory-Hierarchy" class="headerlink" title="Another View of the Memory Hierarchy"></a>Another View of the Memory Hierarchy</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200131194313741.jpg" class="">
+
+<p><span style="background-color:#FFFF00;">VM系统和Cache系统在地址表示方式上的区别：后者是通过引入Cache提高DRAM的访问速度，因此地址是用的是低一级存储DRAM的地址；而前者是通过辅助存储器增大DRAM的容量（目的之一），因此地址用的是高一级存储DRAM的地址。（不是很确定）</span></p>
+<h2 id="Virtual-vs-Physical-Address"><a href="#Virtual-vs-Physical-Address" class="headerlink" title="Virtual vs. Physical Address"></a>Virtual vs. Physical Address</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200201110733386.png" class="">
+
+<ul>
+<li><p>Process use virtual address, e.g. 0 … 0xffff,ffff</p>
+<p>Many processes, all using same (conflicting) address</p>
+</li>
+<li><p>Memory uses physical address (also, e.g. 0 … 0xffff,ffff)</p>
+<p>Memory manager maps virtual to physical address</p>
+</li>
+</ul>
+<h2 id="Virtual-to-Physical-Address-Translation"><a href="#Virtual-to-Physical-Address-Translation" class="headerlink" title="Virtual to Physical Address Translation"></a>Virtual to Physical Address Translation</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200201111317658.png" class="">
+
+<ul>
+<li>Each program operate in its own virtual address space; ~only program running</li>
+<li>Each is protected from the other</li>
+<li>OS can decide where each goes in memory</li>
+<li>Hardware gives virtual -&gt; physical mapping</li>
+</ul>
+<h2 id="Address-Mapping-Page-Table"><a href="#Address-Mapping-Page-Table" class="headerlink" title="Address Mapping: Page Table"></a>Address Mapping: Page Table</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200201121411764.png" class="">
+
+
+
+<img src="/2020/02/07/Berkeley-CS61c/image-20200201121535520.png" class="">
+
+<h2 id="Comparing-2-levels-of-hierarchy"><a href="#Comparing-2-levels-of-hierarchy" class="headerlink" title="Comparing 2 levels of hierarchy"></a>Comparing 2 levels of hierarchy</h2><table>
+<thead>
+<tr>
+<th>Memory Hierarchy</th>
+<th>Cache</th>
+<th>Virtual Memory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>Block or Line</td>
+<td>Page</td>
+</tr>
+<tr>
+<td></td>
+<td>Miss</td>
+<td>Page Fault</td>
+</tr>
+<tr>
+<td>Block Size / Page Size</td>
+<td>32-64B</td>
+<td>4K-8KB</td>
+</tr>
+<tr>
+<td>Placement</td>
+<td>Direct Mapped, N-way Associative</td>
+<td>Fully Associative</td>
+</tr>
+<tr>
+<td>Replacement</td>
+<td>LRU or Random</td>
+<td>LRU</td>
+</tr>
+<tr>
+<td></td>
+<td>Write Through or Back</td>
+<td>Write Back</td>
+</tr>
+</tbody></table>
+<h2 id="Retrieving-Data-from-Memory-with-Page-Table"><a href="#Retrieving-Data-from-Memory-with-Page-Table" class="headerlink" title="Retrieving Data from Memory with Page Table"></a>Retrieving Data from Memory with Page Table</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200202121033206.png" class="">
+
+<ul>
+<li>Solves Fragmentation Problem: all chunks same size, so all holes can be used</li>
+<li>Each process has own Page Table</li>
+<li><font color = red>Requires two access of Physical Memory!</font></li>
+</ul>
+<h2 id="TLB"><a href="#TLB" class="headerlink" title="TLB"></a>TLB</h2><p><font color = red>TLB is a cache for the page table.</font> (Memory acts as a cache for disk.)</p>
+<p>Illustrations below shows the scheme of <font color = red>TLB with cooperation of cache system</font>.</p>
+<img src="/2020/02/07/Berkeley-CS61c/image-20200202122018929.png" class="">
+
+<p>On TLB miss, get page table entry from main memory.</p>
+<p><span style="background-color:#FFFF00;">My Question: What if data is not on Main Memory but on disk? How do we illustrate a page fault?</span></p>
+<h3 id="Address-Translation-Using-TLB"><a href="#Address-Translation-Using-TLB" class="headerlink" title="Address Translation Using TLB"></a>Address Translation Using TLB</h3><img src="/2020/02/07/Berkeley-CS61c/image-20200202124002242.png" class="">
+
+<h3 id="Fetching-Data-on-a-Memory-Read"><a href="#Fetching-Data-on-a-Memory-Read" class="headerlink" title="Fetching Data on a Memory Read"></a>Fetching Data on a Memory Read</h3><ol>
+<li>Check TLB (input: VPN, output: PPN)</li>
+</ol>
+<ul>
+<li>TLB Hit: Fetch translation, return PPN</li>
+<li>TLB Miss: Check page table (in memory)<ul>
+<li>Page Table Hit: Load page table entry into TLB</li>
+<li>Page Table Miss (<font color = red>Page Fault</font>): Fetch page from disk to memory, update corresponding page table entry, then load entry into TLB</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>Check cache (input: PPN, output: data)</li>
+</ol>
+<ul>
+<li>Cache Hit: Return data value to processor</li>
+<li>Cache Miss: Fetch data value from memory, store it in cache, return it to processor</li>
+</ul>
+<h4 id="Page-Faults"><a href="#Page-Faults" class="headerlink" title="Page Faults"></a>Page Faults</h4><ul>
+<li>Load the page off the disk into a free page of memory<ul>
+<li>Switch to some other process while we wait</li>
+</ul>
+</li>
+<li>Interrupt thrown when page loaded and the process’ page table is updated<ul>
+<li>When we switch back to the task, the desired data will be in memory</li>
+</ul>
+</li>
+<li>If memory full, replace page (LRU), writing back if necessary, and update both page table entries<ul>
+<li><span style="background-color:#FFFF00;">Continuous swapping between disk and memory called “thrashing”</span> (不懂)</li>
+</ul>
+</li>
+</ul>
+<h3 id="TLBs-vs-Caches"><a href="#TLBs-vs-Caches" class="headerlink" title="TLBs vs. Caches"></a>TLBs vs. Caches</h3><img src="/2020/02/07/Berkeley-CS61c/image-20200202122432112.png" class="">
+
+<ul>
+<li><p>TLBs usually small, typically 16 - 512 entries</p>
+<p><span style="background-color:#FFFF00;">My Question: What’s an entry?</span></p>
+</li>
+<li><p>TLB access time comparable to cache (&lt;&lt; main memory)</p>
+</li>
+<li><p>TLBs can have associativity (usually fully/highly associative)</p>
+</li>
+</ul>
+<h1 id="Lecture-31-Thread-Level-Parallelism"><a href="#Lecture-31-Thread-Level-Parallelism" class="headerlink" title="Lecture 31: Thread-Level Parallelism"></a>Lecture 31: Thread-Level Parallelism</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>SIMD, MIMD, Multi-Core, 指令级并行(instruction-level parallelism), 超标量… 有什么联系？</p>
+<h2 id="Multi-Core-Model"><a href="#Multi-Core-Model" class="headerlink" title="Multi-Core Model"></a>Multi-Core Model</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200203152153835.png" class="">
+
+<ul>
+<li>Each core executes its own instructions</li>
+<li>Separate resources<ul>
+<li>Datapath (PC, registers, ALU)</li>
+<li>Highest level caches (e.g., 1st and 2nd)</li>
+</ul>
+</li>
+<li>Shared resources<ul>
+<li>Memory (DRAM)</li>
+<li>Often 3rd level cache (Often on same silicon chip; not a requirement)</li>
+</ul>
+</li>
+</ul>
+<h2 id="Threads"><a href="#Threads" class="headerlink" title="Threads"></a>Threads</h2><ul>
+<li>Sequential flow of instructions that performs some task</li>
+<li>Each thread has:<ul>
+<li>Dedicated program counter</li>
+<li>Separate registers</li>
+<li>Access the shared memory</li>
+</ul>
+</li>
+<li>Each physical core provides one (or more)<ul>
+<li><font color = red>Hardware threads</font> that actively execute instructions</li>
+<li>Each executes one “hardware thread”</li>
+</ul>
+</li>
+<li>Operating system multiplexes multiple<ul>
+<li><font color = red>Software threads</font> onto the available hardware threads</li>
+<li>All threads except those mapped to hardware threads are waiting</li>
+</ul>
+</li>
+</ul>
+<h3 id="Operating-System-Threads"><a href="#Operating-System-Threads" class="headerlink" title="Operating System Threads"></a>Operating System Threads</h3><p>Give illusion of many “simultaneously” activate threads</p>
+<ol>
+<li><p>Multiplex software threads onto hardware threads:</p>
+<p>a) Switch out blocked threads (e.g., cache miss, user input, network access)</p>
+<p>b) Timer (e.g., switch activate thread every 1ms)</p>
+</li>
+<li><p>Remove a software thread from a hardware thread by</p>
+<p>a) Interrupting its execution</p>
+<p>b) Saving its registers and PC to memory</p>
+</li>
+<li><p>Start executing a different software thread by</p>
+<p>a) Loading its previously saved registers into a hardware thread’s registers</p>
+<p>b) Jumping to its saved PC</p>
+</li>
+</ol>
+<h3 id="Hardware-Assisted-Software-Multithreading"><a href="#Hardware-Assisted-Software-Multithreading" class="headerlink" title="Hardware Assisted Software Multithreading"></a>Hardware Assisted Software Multithreading</h3><img src="/2020/02/07/Berkeley-CS61c/image-20200203153007294.jpg" class="">
+
+<ul>
+<li>Two copies of PC and Registers inside processor hardware</li>
+<li>Looks identical to two processors to software (hardware thread 0, hardware thread 1)</li>
+<li>Modern machines do both multi-core and multi-thread</li>
+</ul>
+
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/02/06/test/">test</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Liu Hanzhang | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
