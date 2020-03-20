@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Liu Hanzhang">
+
+
+
+
+
+<title>YOLOv3实现 | Welcome to my notebook!</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Hanzhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Hanzhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">YOLOv3实现</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Liu Hanzhang</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 20, 2020&nbsp;&nbsp;21:52:28</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Notebook/">Notebook</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="搭建网络"><a href="#搭建网络" class="headerlink" title="搭建网络"></a>搭建网络</h1><h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p>关于YOLOv3的网络架构，参阅<a href="../YOLO/#网络架构">这里</a>. 为方便，下面再次展示YOLOv3的网络架构图。</p>
+<img src="/2020/03/20/YOLOv3%E5%AE%9E%E7%8E%B0/v2-d2596ea39974bcde176d1cf4dc99705e_r.jpg" class="">
+
+<p>打开<code>yolov3.cfg</code>文件后，我们可以看到5种类型的Layer</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[convolutional]</span><br><span class="line">batch_normalize&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">size&#x3D;1</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">activation&#x3D;leaky</span><br></pre></td></tr></table></figure>
+
+<p>注意：这里的<code>pad</code>和<code>batch_normalize</code>是bool类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[shortcut]</span><br><span class="line">from&#x3D;-3</span><br><span class="line">activation&#x3D;linear</span><br></pre></td></tr></table></figure>
+
+<p><code>shotcut</code>层是跳过连接(skip connection)，类似于ResNet中使用的连接。 from参数为-3，表示<code>shortcut</code>层的输出是通过将<code>shortcut</code>层的前一层和前面的第三层的特征图相加得到的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[upsample]</span><br><span class="line">stride&#x3D;2</span><br></pre></td></tr></table></figure>
+
+<p>对前一层的特征图应用双线性上采样，采样因子为<code>stride</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[route]</span><br><span class="line">layers &#x3D; -1, 61</span><br><span class="line"></span><br><span class="line">[route]</span><br><span class="line">layers &#x3D; -1, 61</span><br></pre></td></tr></table></figure>
+
+<p><code>route</code>层具有一个<code>layers</code>属性，它可以具有一个或两个值。当<code>layers</code>属性只有一个值时，它会输出由该值索引的层的特征图。在我们的示例中，它是-4，因此该层将输出位于<code>route</code>层前面的第4层的特征图。当层有两个值时，它会返回由其值所索引的层的特征图的连接。在我们的例子中，它是-1,61，该层输出来自前一层（-1）和第61层的特征图，它们沿着深度维度进行连接。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[yolo]</span><br><span class="line">mask &#x3D; 0,1,2</span><br><span class="line">anchors &#x3D; 10,13,  16,30,  33,23,  30,61,  62,45,  59,119,  116,90,  156,198,  373,326</span><br><span class="line">classes&#x3D;80</span><br><span class="line">num&#x3D;9</span><br><span class="line">jitter&#x3D;.3</span><br><span class="line">ignore_thresh &#x3D; .7</span><br><span class="line">truth_thresh &#x3D; 1</span><br><span class="line">random&#x3D;1</span><br></pre></td></tr></table></figure>
+
+<p>有3个<code>yolo</code>层，其输入分别是上图中网络的输出——3种尺寸的特征图。<code>anchors</code>描述了9个box priors，但仅使用由<code>mask</code>索引的box priors. </p>
+<h2 id="解析配置文件"><a href="#解析配置文件" class="headerlink" title="解析配置文件"></a>解析配置文件</h2><p>我们要利用<code>yolov3.cfg</code>文件中的信息，创建相应的Layer <code>nn.Module</code>，并按网络拓扑拼接形成<code>nn.ModuleList</code>. 第一步就是解析配置文件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_cfg</span><span class="params">(cfgfile)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    解析cfg文件</span></span><br><span class="line"><span class="string">    将每个block存储为字典。block的属性及其值在字典中作为键值对存储。</span></span><br><span class="line"><span class="string">    把block添加到列表blocks中</span></span><br><span class="line"><span class="string">    返回blocks</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    file = open(cfgfile,<span class="string">'r'</span>)</span><br><span class="line">    lines = file.read().split(<span class="string">'\n'</span>)<span class="comment">#把cfg文件按行存储在list中</span></span><br><span class="line">    lines = [x <span class="keyword">for</span> x <span class="keyword">in</span> lines <span class="keyword">if</span> len(x) &gt; <span class="number">0</span>]<span class="comment">#去掉空行</span></span><br><span class="line">    lines = [x <span class="keyword">for</span> x <span class="keyword">in</span> lines <span class="keyword">if</span> x[<span class="number">0</span>] != <span class="string">'#'</span>]<span class="comment">#去掉注释</span></span><br><span class="line">    lines = [x.rstrip().lstrip() <span class="keyword">for</span> x <span class="keyword">in</span> lines]<span class="comment">#删除行首行末的空格</span></span><br><span class="line"></span><br><span class="line">    block = &#123;&#125;</span><br><span class="line">    blocks = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">        <span class="keyword">if</span> line[<span class="number">0</span>] == <span class="string">'['</span> :<span class="comment">#新的block开始</span></span><br><span class="line">            <span class="keyword">if</span> len(block) != <span class="number">0</span>:</span><br><span class="line">                blocks.append(block)<span class="comment">#新的block开始，把上一个block添加到list中</span></span><br><span class="line">                block = &#123;&#125;<span class="comment">#初始化新的block</span></span><br><span class="line">            block[<span class="string">"type"</span>] = line.lstrip(<span class="string">'['</span>).rstrip(<span class="string">']'</span>)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> block[<span class="string">"type"</span>] == <span class="string">"convolutional"</span>:</span><br><span class="line">                block[<span class="string">"batch_normalize"</span>] = <span class="number">0</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            key, value = line.split(<span class="string">'='</span>)</span><br><span class="line">            block[key.rstrip()] = value.lstrip()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> block:</span><br><span class="line">        blocks.append(block)</span><br><span class="line">    file.close()</span><br><span class="line">    <span class="keyword">return</span> blocks</span><br></pre></td></tr></table></figure>
+
+<h2 id="创造构建Layer"><a href="#创造构建Layer" class="headerlink" title="创造构建Layer"></a>创造构建Layer</h2><p>现在我们将使用上述<code>parse_cfg</code>返回的列表，为配置文件中存在的Layer构造PyTorch模块(<code>nn.Module</code>).</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_network</span><span class="params">(blocks)</span>:</span></span><br><span class="line">    module_list = nn.ModuleList()</span><br><span class="line">    net_info = blocks[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment">#上一个卷积层的filter数量，也就是当前卷积层的输入通道数</span></span><br><span class="line">    prev_filters = <span class="number">3</span>    <span class="comment">#3是输入通道数，即RGB</span></span><br><span class="line">    <span class="comment">#前面所有输出层的filter数量</span></span><br><span class="line">    output_filters = [] <span class="comment">#不包括输入通道数3</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> index, block <span class="keyword">in</span> enumerate(blocks[<span class="number">1</span>:]):</span><br><span class="line">        module = nn.Sequential()</span><br><span class="line">        <span class="comment">#check the type of block</span></span><br><span class="line">        <span class="comment">#create a new module for the block</span></span><br><span class="line">        <span class="comment">#append to module_list</span></span><br><span class="line">        <span class="keyword">if</span> block[<span class="string">"type"</span>] == <span class="string">"convolutional"</span>:</span><br><span class="line">            <span class="comment">#get info about this block</span></span><br><span class="line">            activation = block[<span class="string">"activation"</span>]</span><br><span class="line">            batch_normalize = int(block[<span class="string">"batch_normalize"</span>])</span><br><span class="line">            filters = int(block[<span class="string">"filters"</span>])</span><br><span class="line">            padding = int(block[<span class="string">"pad"</span>])<span class="comment">#<span class="doctag">NOTE:</span>cfg里的pad是bool类型</span></span><br><span class="line">            kernel_size = int(block[<span class="string">"size"</span>])</span><br><span class="line">            stride = int(block[<span class="string">"stride"</span>])</span><br><span class="line"></span><br><span class="line">            <span class="comment">#<span class="doctag">TODO:</span>这里是什么意思？论文中有提到过吗？</span></span><br><span class="line">            <span class="keyword">if</span> padding:</span><br><span class="line">                pad = (kernel_size - <span class="number">1</span>) // <span class="number">2</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                pad = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">#<span class="doctag">TODO:</span>Conv层的bias是True还是False?</span></span><br><span class="line">            <span class="keyword">if</span> batch_normalize:</span><br><span class="line">                module.add_module(<span class="string">'conv_&#123;&#125;'</span>.format(index), nn.Conv2d(prev_filters, filters, kernel_size, stride, pad, bias = <span class="literal">False</span>))</span><br><span class="line">                module.add_module(<span class="string">'bn_&#123;&#125;'</span>.format(index), nn.BatchNorm2d(filters))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                module.add_module(<span class="string">'conv_&#123;&#125;'</span>.format(index), nn.Conv2d(prev_filters, filters, kernel_size, stride, pad, bias = <span class="literal">True</span>))</span><br><span class="line">            <span class="keyword">if</span> activation == <span class="string">"leaky"</span>:</span><br><span class="line">                module.add_module(<span class="string">'leaky_&#123;&#125;'</span>.format(index), nn.LeakyReLU(<span class="number">0.1</span>, inplace=<span class="literal">True</span>)) </span><br><span class="line">            prev_filters = filters</span><br><span class="line">            output_filters.append(prev_filters)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> block[<span class="string">"type"</span>] == <span class="string">"upsample"</span>:</span><br><span class="line">            stride = int(block[<span class="string">"stride"</span>])</span><br><span class="line">            <span class="comment">#这里的stride是Unsample的scale_factor</span></span><br><span class="line">            <span class="comment">#<span class="doctag">TODO:</span>mode是nearest还是bilinear?</span></span><br><span class="line">            module.add_module(<span class="string">"upsample_&#123;&#125;"</span>.format(index), nn.Upsample(scale_factor=stride, mode=<span class="string">'nearest'</span>))</span><br><span class="line">            output_filters.append(prev_filters)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">elif</span> block[<span class="string">"type"</span>] == <span class="string">"route"</span>:</span><br><span class="line">            layers = block[<span class="string">"layers"</span>].split(<span class="string">','</span>)</span><br><span class="line">            start = int(layers[<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                end = int(layers[<span class="number">1</span>])</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                end = <span class="number">0</span></span><br><span class="line">            <span class="comment">#convert positive annotation to negative annotation</span></span><br><span class="line">            <span class="keyword">if</span> start &gt; <span class="number">0</span>:</span><br><span class="line">                start = start - index</span><br><span class="line">            <span class="keyword">if</span> end &gt; <span class="number">0</span>:</span><br><span class="line">                end = end - index</span><br><span class="line">            route = EmptyLayer()</span><br><span class="line">            module.add_module(<span class="string">"route_&#123;&#125;"</span>.format(index), route)</span><br><span class="line">            <span class="keyword">if</span> end &lt; <span class="number">0</span>: <span class="comment">#如果end存在</span></span><br><span class="line">                <span class="comment">#concatenate feature maps</span></span><br><span class="line">                filters = output_filters[index + start] + output_filters[index + end]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                filters = output_filters[index + start]</span><br><span class="line">            prev_filters = filters</span><br><span class="line">            output_filters.append(prev_filters)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> block[<span class="string">"type"</span>] == <span class="string">"shortcut"</span>:</span><br><span class="line">            shortcut = EmptyLayer()</span><br><span class="line">            module.add_module(<span class="string">"shortcut_&#123;&#125;"</span>.format(index), shortcut)</span><br><span class="line">            output_filters.append(prev_filters)</span><br><span class="line"></span><br><span class="line">        <span class="comment">#YOLO is the detection layer</span></span><br><span class="line">        <span class="keyword">elif</span> block[<span class="string">"type"</span>] == <span class="string">"yolo"</span>:</span><br><span class="line">            mask = block[<span class="string">"mask"</span>].split(<span class="string">','</span>)</span><br><span class="line">            mask = [int(x) <span class="keyword">for</span> x <span class="keyword">in</span> mask]</span><br><span class="line"></span><br><span class="line">            anchors = block[<span class="string">"anchors"</span>].split(<span class="string">','</span>)</span><br><span class="line">            anchors = [int(x) <span class="keyword">for</span> x <span class="keyword">in</span> anchors]</span><br><span class="line">            anchors = [(anchors[i], anchors[i+<span class="number">1</span>]) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(anchors), <span class="number">2</span>)]</span><br><span class="line">            anchors = [anchors[i] <span class="keyword">for</span> i <span class="keyword">in</span> mask]</span><br><span class="line"></span><br><span class="line">            num_classes = int(block[<span class="string">"classes"</span>])</span><br><span class="line">            img_size = net_info[<span class="string">"height"</span>]</span><br><span class="line"></span><br><span class="line">            yolo_layer = YoloLayer(anchors, num_classes, img_size)</span><br><span class="line">            module.add_module(<span class="string">"Yolo_&#123;&#125;"</span>.format(index), yolo_layer)</span><br><span class="line">            output_filters.append(prev_filters)</span><br><span class="line"></span><br><span class="line">        module_list.append(module)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> net_info, module_list</span><br></pre></td></tr></table></figure>
+
+<p>我们有一个名为<code>EmptyLayer</code>的新层，顾名思义就是一个空层。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">route = EmptyLayer()</span><br><span class="line"></span><br><span class="line">shortcut = EmptyLayer()</span><br></pre></td></tr></table></figure>
+
+<p>它被定义为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EmptyLayer</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="comment">#Placeholder for route and shortcut layers</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(EmptyLayer, self).__init__()</span><br></pre></td></tr></table></figure>
+
+<p>现在，空层可能看起来很奇怪，因为它什么都不做。<code>route</code>层，就像任何其他层一样执行操作（使用前面的层/连接）。在PyTorch中，当我们定义一个新层时，它继承<code>nn.Module</code>，在<code>nn.Module</code>对象的<code>forward</code>函数写入层执行的操作。</p>
+<p>为了设计<code>route</code> Layer，我们构建一个<code>nn.Module</code>对象。然后，我们可以在<code>forward</code>函数中编写代码来连接/获取特征图。最后，我们在网络的<code>forward</code>函数中执行该层的操作。</p>
+<p>但是，如果连接代码相当简短（在特征图上调用<code>torch.cat</code>），那么设计一个如上所述的层将导致不必要的抽象，这只会增加代码。我们可以做一个空层来代替提出的<code>route</code>层，然后直接在<code>Darknet</code>的<code>nn.Module</code>对象的<code>forward</code>函数中执行连接。</p>
+<h2 id="创造构建YOLO-Layer"><a href="#创造构建YOLO-Layer" class="headerlink" title="创造构建YOLO Layer"></a>创造构建YOLO Layer</h2><p>建立<code>yolo</code>层：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">YoloLayer</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, anchors, num_classes, img_dim=<span class="number">416</span>)</span>:</span></span><br><span class="line">        super(YoloLayer, self).__init__()</span><br><span class="line">        self.anchors = anchors</span><br><span class="line">        self.num_anchors = len(anchors)</span><br><span class="line">        self.num_classes = num_classes</span><br><span class="line">        self.ignore_thres = <span class="number">0.5</span> </span><br><span class="line">        self.mse_loss = nn.MSELoss()</span><br><span class="line">        self.bce_loss = nn.BCELoss()</span><br><span class="line">        self.obj_scale = <span class="number">1</span> </span><br><span class="line">        self.noobj_scale = <span class="number">100</span></span><br><span class="line">        self.metrics = &#123;&#125;</span><br><span class="line">        self.img_dim = img_dim</span><br><span class="line">        self.grid_size = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>yolo</code>层涉及到<a href="../YOLO/#损失函数-1">损失函数</a>的计算。为方便起见，这里再给出计算损失函数的公式：</p>
+<p>
+$$
+\begin{align*}
+{\rm loss}=&\lambda_{\rm coord} \sum_{i=0}^{S_1\times S_1} \sum_{j=0}^{B}\mathbb{1}_{ij}^{\rm obj} [(t_{x_i}-\hat t_{x_i})^2 + (t_{y_i} - \hat t_{y_i})^2]\\
++& \lambda_{\rm coord} \sum_{i=0}^{S_1\times S_1} \sum_{j=0}^{B}\mathbb{1}_{ij}^{\rm obj} [(t_{w_i}-\hat t_{w_i})^2 + (t_{h_i} - \hat t_{h_i})^2]\\
+-& \lambda_{\rm obj} \sum_{i=0}^{S_1\times S_1} \sum_{j=0}^{B}\mathbb{1}_{ij}^{\rm obj}
+\log(c_{ij})
+- \lambda_{\rm noobj} \sum_{i=0}^{S_1\times S_1} \sum_{j=0}^{B}\mathbb{1}_{ij}^{\rm noobj}
+\log(1-c_{ij})\\
+-& \lambda_{\rm class} \sum_{i=0}^{S_1\times S_1} \sum_{j=0}^{B}\mathbb{1}_{ij}^{\rm obj} \sum_{c\in {\rm classes}} [\hat p_{ij}(c)\log(p_{ij}(c)) + (1-\hat p_{ij}(c))\log(1-p_{ij}(c))]
+\end{align*}
+$$
+</p>
+
+<p>由公式容易得到代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, targets=None, img_dim=None)</span>:</span></span><br><span class="line">    <span class="comment">#x is feature map, of shape N, C, H, W</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">###</span></span><br><span class="line">    loss_x = self.mse_loss(x[obj_mask], tx[obj_mask])</span><br><span class="line">    loss_y = self.mse_loss(y[obj_mask], ty[obj_mask])</span><br><span class="line">    loss_w = self.mse_loss(w[obj_mask], tw[obj_mask])</span><br><span class="line">    loss_h = self.mse_loss(h[obj_mask], th[obj_mask])</span><br><span class="line">    loss_conf_obj = self.bce_loss(pred_conf[obj_mask], tconf[obj_mask])</span><br><span class="line">    loss_conf_noobj = self.bce_loss(pred_conf[noobj_mask], tconf[noobj_mask])</span><br><span class="line">    loss_conf = self.obj_scale * loss_conf_obj + self.noobj_scale * loss_conf_noobj</span><br><span class="line">    loss_cls = self.bce_loss(pred_cls[obj_mask], tcls[obj_mask])</span><br><span class="line">    total_loss = loss_x + loss_y + loss_w + loss_h + loss_conf + loss_cls</span><br><span class="line">    <span class="comment">###</span></span><br></pre></td></tr></table></figure>
+
+<p>现在的问题是$\mathbb{1}_{ij}^{\rm obj}$，也就是代码中的<code>obj_mask</code>如何求。我们这里调用<code>build_target</code>函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">iou_scores, class_mask, obj_mask, noobj_mask, tx, ty, tw, th, tcls, tconf = build_targets(</span><br><span class="line">    pred_boxes=pred_boxes, pred_cls=pred_cls, target=targets,</span><br><span class="line">    anchors=self.scaled_anchors, ignore_thres=self.ignore_thres</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><code>pred_boxes</code>和<code>pred_cls</code>是从<code>forward</code>函数的输入<code>x</code>中提取的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">prediction = (<span class="comment">#(N, C, H, W) -&gt; (N, #anchors, 5+#classes, H, W)</span></span><br><span class="line">    x.view(num_samples, self.num_anchors, self.num_classes+<span class="number">5</span>, grid_size, grid_size)\</span><br><span class="line">        .permute(<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>).contiguous()<span class="comment">#-&gt;(N, #anchors, H, W, 5+#classes)</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">#Get outputs</span></span><br><span class="line"><span class="comment">#x, y, w, h of shape [N, #anchors, H, W]</span></span><br><span class="line">x = torch.sigmoid(prediction[..., <span class="number">0</span>])   <span class="comment">#center x</span></span><br><span class="line">y = torch.sigmoid(prediction[..., <span class="number">1</span>])   <span class="comment">#center y</span></span><br><span class="line">w = prediction[..., <span class="number">2</span>]  <span class="comment">#width</span></span><br><span class="line">h = prediction[..., <span class="number">3</span>] <span class="comment">#height</span></span><br><span class="line">pred_conf = torch.sigmoid(prediction[..., <span class="number">4</span>])   <span class="comment">#conf</span></span><br><span class="line"><span class="comment">#pred_cls of shape [N, #anchors, H, W, #classes]</span></span><br><span class="line">pred_cls = torch.sigmoid(prediction[..., <span class="number">5</span>:])   <span class="comment">#cls pred</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#If grid size does not match current we compute new offsets</span></span><br><span class="line"><span class="keyword">if</span> grid_size != self.grid_size:</span><br><span class="line">    self.compute_grid_offsets(grid_size, cuda=x.is_cuda)</span><br><span class="line"></span><br><span class="line"><span class="comment">#Add offset and scale with anchors</span></span><br><span class="line">pred_boxes = FloatTensor(prediction[..., :<span class="number">4</span>].shape)</span><br><span class="line">pred_boxes[..., <span class="number">0</span>] = x.data + self.grid_x</span><br><span class="line">pred_boxes[..., <span class="number">1</span>] = y.data + self.grid_y</span><br><span class="line">pred_boxes[..., <span class="number">2</span>] = torch.exp(w.data) * self.anchor_w</span><br><span class="line">pred_boxes[..., <span class="number">3</span>] = torch.exp(h.data) * self.anchor_h</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>Add offset and scale with anchors</code>部分的公式参见<a href="../YOLO/#Direct-location-prediction">这里</a>。公式中的$c_x,c _y$，也就是<code>self.grid_x, self.grid_y</code>是如何计算的呢？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_grid_offsets</span><span class="params">(self, grid_size, cuda=True)</span>:</span></span><br><span class="line">    self.grid_size = grid_size</span><br><span class="line">    g = self.grid_size</span><br><span class="line">    FloatTensor = torch.cuda.FloatTensor <span class="keyword">if</span> cuda <span class="keyword">else</span> torch.FloatTensor</span><br><span class="line">    self.stride = self.img_dim / self.grid_size</span><br><span class="line">    <span class="comment">#Calculate offsets for each grid</span></span><br><span class="line">    self.grid_x = torch.arange(g).repeat(g, <span class="number">1</span>).view([<span class="number">1</span>, <span class="number">1</span>, g, g]).type(FloatTensor)</span><br><span class="line">    self.grid_y = torch.arange(g).repeat(g, <span class="number">1</span>).t().view([<span class="number">1</span>, <span class="number">1</span>, g, g]).type(FloatTensor)</span><br><span class="line">    self.scaled_anchors = FloatTensor([(a_w / self.stride, a_h / self.stride) <span class="keyword">for</span> a_w, a_h <span class="keyword">in</span> self.anchors])</span><br><span class="line">    self.anchor_w = self.scaled_anchors[:, <span class="number">0</span>:<span class="number">1</span>].view((<span class="number">1</span>, self.num_anchors, <span class="number">1</span>, <span class="number">1</span>))</span><br><span class="line">    self.anchor_h = self.scaled_anchors[:, <span class="number">1</span>:<span class="number">2</span>].view((<span class="number">1</span>, self.num_anchors, <span class="number">1</span>, <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>torch.arange(<span class="number">5</span>)</span><br><span class="line">tensor([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">4</span>])</span><br></pre></td></tr></table></figure>
+
+<p><code>torch.Tensor.repeat</code>: Repeats this tensor along the specified dimensions.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = torch.tensor([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x.repeat(<span class="number">4</span>, <span class="number">2</span>)</span><br><span class="line">tensor([[ <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>],</span><br><span class="line">        [ <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>],</span><br><span class="line">        [ <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>],</span><br><span class="line">        [ <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>]])</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>好了，现在该看看<code>build_targets</code>函数是如何构建的了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_targets</span><span class="params">(pred_boxes, pred_cls, target, anchors, ignore_thres)</span>:</span></span><br><span class="line">    ByteTensor = torch.cuda.ByteTensor <span class="keyword">if</span> pred_boxes.is_cuda <span class="keyword">else</span> torch.ByteTensor</span><br><span class="line">    FloatTensor = torch.cuda.FloatTensor <span class="keyword">if</span> pred_boxes.is_cuda <span class="keyword">else</span> torch.FloatTensor</span><br><span class="line"></span><br><span class="line">    <span class="comment">#pred_boxes of shape [N, #anchors, H, W, 4(译码后的x, y, w, h)]</span></span><br><span class="line">    <span class="comment">#pred_cls of shape [N, #anchors, H, W, #classes]</span></span><br><span class="line">    nB = pred_boxes.size(<span class="number">0</span>)</span><br><span class="line">    nA = pred_boxes.size(<span class="number">1</span>)</span><br><span class="line">    nC = pred_cls.size(<span class="number">-1</span>)</span><br><span class="line">    nG = pred_boxes.size(<span class="number">2</span>)<span class="comment">#grid size</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#Output tensors</span></span><br><span class="line">    obj_mask = ByteTensor(nB, nA, nG, nG).fill_(<span class="number">0</span>)</span><br><span class="line">    noobj_mask = ByteTensor(nB, nA, nG, nG).fill_(<span class="number">1</span>)</span><br><span class="line">    class_mask = FloatTensor(nB, nA, nG, nG).fill_(<span class="number">0</span>)</span><br><span class="line">    iou_scores = FloatTensor(nB, nA, nG, nG).fill_(<span class="number">0</span>)</span><br><span class="line">    tx = FloatTensor(nB, nA, nG, nG).fill_(<span class="number">0</span>)</span><br><span class="line">    ty = FloatTensor(nB, nA, nG, nG).fill_(<span class="number">0</span>)</span><br><span class="line">    tw = FloatTensor(nB, nA, nG, nG).fill_(<span class="number">0</span>)</span><br><span class="line">    th = FloatTensor(nB, nA, nG, nG).fill_(<span class="number">0</span>)</span><br><span class="line">    tcls = FloatTensor(nB, nA, nG, nG, nC).fill_(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#Convert to position relative to box</span></span><br><span class="line">    target_boxes = target[:, <span class="number">2</span>:<span class="number">6</span>] * nG</span><br><span class="line">    gxy = target_boxes[:, :<span class="number">2</span>]</span><br><span class="line">    gwh = target_boxes[:, <span class="number">2</span>:]</span><br><span class="line">    <span class="comment">#Get anchors with best iou</span></span><br><span class="line">    ious = torch.stack([bbox_wh_iou(anchor, gwh) <span class="keyword">for</span> anchor <span class="keyword">in</span> anchors])</span><br><span class="line">    best_ious, best_n = ious.max(<span class="number">0</span>)</span><br><span class="line">    <span class="comment">#Separate target values</span></span><br><span class="line">    b, target_labels = target[:, :<span class="number">2</span>].long().t()</span><br><span class="line">    gx, gy = gxy.t()</span><br><span class="line">    gw, gh = gwh.t()</span><br><span class="line">    gi, gj = gxy.long().t()</span><br><span class="line">    <span class="comment">#Set masks</span></span><br><span class="line">    obj_mask[b, best_n, gj, gi] = <span class="number">1</span></span><br><span class="line">    noobj_mask[b, best_n, gj, gi] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#Set noobj mask to zero where iou exceeds ignore threshold</span></span><br><span class="line">    <span class="keyword">for</span> i, anchor_ious <span class="keyword">in</span> enumerate(ious.t()):</span><br><span class="line">        noobj_mask[b[i], anchor_ious &gt; ignore_thres, gj[i], gi[i]] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#Coordinates</span></span><br><span class="line">    tx[b, best_n, gj, gi] = gx - gx.floor()</span><br><span class="line">    ty[b, best_n, gj, gi] = gy - gy.floor()</span><br><span class="line">    <span class="comment">#Width and height</span></span><br><span class="line">    tw[b, best_n, gj, gi] = torch.log(gw / anchors[best_n][:, <span class="number">0</span>] + <span class="number">1e-16</span>)</span><br><span class="line">    th[b, best_n, gj, gi] = torch.log(gh / anchors[best_n][:, <span class="number">1</span>] + <span class="number">1e-16</span>)</span><br><span class="line">    <span class="comment">#One-hot encoding of label</span></span><br><span class="line">    tcls[b, best_n, gj, gi, target_labels] = <span class="number">1</span></span><br><span class="line">    <span class="comment">#Compute label correctness and iou at best anchor</span></span><br><span class="line">    class_mask[b, best_n, gj, gi] = (pred_cls[b, best_n, gj, gi].argmax(<span class="number">-1</span>) == target_labels).float()</span><br><span class="line">    iou_scores[b, best_n, gi, gi] = bbox_iou(pred_boxes[b, best_n, gj, gi], target_boxes, x1y1x2y2=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    tconf = obj_mask.float()</span><br><span class="line">    <span class="keyword">return</span> iou_scores, class_mask, obj_mask, noobj_mask, tx, ty, tw, th, tcls, tconf</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>bbox_wh_iou</code>和<code>bbox_iou</code>都是计算两个bounding box之间的IoU的函数；<code>t()</code>是二维数组转置函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bbox_wh_iou</span><span class="params">(wh1, wh2)</span>:</span></span><br><span class="line">    wh2 = wh2.t()</span><br><span class="line">    w1, h1 = wh1[<span class="number">0</span>], wh1[<span class="number">1</span>]</span><br><span class="line">    w2, h2 = wh2[<span class="number">0</span>], wh2[<span class="number">1</span>]</span><br><span class="line">    inter_area = torch.min(w1, w2) * torch.min(h1, h2)</span><br><span class="line">    union_area = (w1 * h1 + <span class="number">1e-16</span>) + w2 * h2 - inter_area</span><br><span class="line">    <span class="keyword">return</span> inter_area / union_area</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bbox_iou</span><span class="params">(box1, box2, x1y1x2y2=True)</span>:</span></span><br><span class="line">    <span class="comment">#<span class="doctag">TODO:</span>box2不应该是bbox的数组吗？不应该是一个单独的box啊？</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> x1y1x2y2:</span><br><span class="line">        <span class="comment">#Transform from center and width to exact coordinates</span></span><br><span class="line">        b1_x1, b1_x2 = box1[:, <span class="number">0</span>] - box1[:, <span class="number">2</span>] / <span class="number">2</span>, box1[:, <span class="number">0</span>] + box1[:, <span class="number">2</span>] / <span class="number">2</span></span><br><span class="line">        b1_y1, b1_y2 = box1[:, <span class="number">1</span>] - box1[:, <span class="number">3</span>] / <span class="number">2</span>, box1[:, <span class="number">1</span>] + box1[:, <span class="number">3</span>] / <span class="number">2</span></span><br><span class="line">        b2_x1, b2_x2 = box2[:, <span class="number">0</span>] - box2[:, <span class="number">2</span>] / <span class="number">2</span>, box2[:, <span class="number">0</span>] + box2[:, <span class="number">2</span>] / <span class="number">2</span></span><br><span class="line">        b2_y1, b2_y2 = box2[:, <span class="number">1</span>] - box2[:, <span class="number">3</span>] / <span class="number">2</span>, box2[:, <span class="number">1</span>] + box2[:, <span class="number">3</span>] / <span class="number">2</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment">#Get the coordinates of bounding boxes</span></span><br><span class="line">        b1_x1, b1_y1, b1_x2, b1_y2 = box1[:, <span class="number">0</span>], box1[:, <span class="number">1</span>], box1[:, <span class="number">2</span>], box1[:, <span class="number">3</span>]</span><br><span class="line">        b2_x1, b2_y1, b2_x2, b2_y2 = box2[:, <span class="number">0</span>], box2[:, <span class="number">1</span>], box2[:, <span class="number">2</span>], box2[:, <span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment">#Get the coordinates of the intersection rectangle</span></span><br><span class="line">    inter_rect_x1 = torch.max(b1_x1, b2_x1)</span><br><span class="line">    inter_rect_y1 = torch.max(b1_y1, b2_y1)</span><br><span class="line">    inter_rect_x2 = torch.min(b1_x2, b2_x2)</span><br><span class="line">    inter_rect_y2 = torch.min(b1_y2, b2_y2)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#Intersection area</span></span><br><span class="line">    inter_area = torch.clamp(inter_rect_x2 - inter_rect_x1 + <span class="number">1</span>, min=<span class="number">0</span>) * \</span><br><span class="line">        torch.clamp(inter_rect_y2 - inter_rect_y1 + <span class="number">1</span>, min=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#Union area</span></span><br><span class="line">    b1_area = (b1_x2 - b1_x1 + <span class="number">1</span>) * (b1_y2 - b1_y1 + <span class="number">1</span>)</span><br><span class="line">    b2_area = (b2_x2 - b2_x1 + <span class="number">1</span>) * (b2_y2 - b2_y1 + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    iou = inter_area / (b1_area + b2_area - inter_area)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> iou</span><br></pre></td></tr></table></figure>
+
+<p>最后的问题是：<font color = purple><code>build_targets</code>函数的参数<code>target</code>的维度是怎样的？</font> 我还没有搞清楚，不过<code>target</code>显然是从训练集中直接得到的数据。</p>
+<h2 id="Darknet"><a href="#Darknet" class="headerlink" title="Darknet"></a>Darknet</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Darknet</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, cfgfile, img_size=<span class="number">416</span>)</span>:</span></span><br><span class="line">        super(Darknet, self).__init__()</span><br><span class="line">        self.blocks = parse_cfg(cfgfile)</span><br><span class="line">        self.net_info, self.module_list = create_network(self.blocks)</span><br><span class="line">        self.img_size = img_size</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x, targets=None)</span>:</span></span><br><span class="line">        <span class="comment">#cache outputs for route layer. key:index value: feature map</span></span><br><span class="line">        outputs = &#123;&#125;</span><br><span class="line">        yolo_outputs = []</span><br><span class="line">        loss = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> index, block <span class="keyword">in</span> enumerate(self.blocks[<span class="number">1</span>:]):</span><br><span class="line">            <span class="keyword">if</span> block[<span class="string">"type"</span>] <span class="keyword">in</span> [<span class="string">"convolutional"</span>, <span class="string">"upsample"</span>]:</span><br><span class="line">                x = self.module_list[index](x)</span><br><span class="line">                outputs[str(index)] = x</span><br><span class="line">            <span class="keyword">elif</span> block[<span class="string">"type"</span>] ==  <span class="string">"route"</span>:</span><br><span class="line">                layers = block[<span class="string">"layers"</span>].split(<span class="string">','</span>)</span><br><span class="line">                <span class="comment">#convert negative annotation to positive annotation</span></span><br><span class="line">                layers = [int(i) <span class="keyword">if</span> int(i) &gt; <span class="number">0</span> <span class="keyword">else</span> int(i)+index <span class="keyword">for</span> i <span class="keyword">in</span> layers]</span><br><span class="line">                <span class="keyword">if</span> len(layers) == <span class="number">1</span>:</span><br><span class="line">                    x = outputs[str(layers[<span class="number">0</span>])]</span><br><span class="line">                    outputs[str(index)] = x</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    x1 = outputs[str(layers[<span class="number">0</span>])]</span><br><span class="line">                    x2 = outputs[str(layers[<span class="number">1</span>])]</span><br><span class="line">                    <span class="comment">#x of shape(N,C,H,W), concatenate along dim C</span></span><br><span class="line">                    x = torch.cat((x1, x2), dim=<span class="number">1</span>)</span><br><span class="line">                    outputs[str(index)] = x</span><br><span class="line">            <span class="keyword">elif</span> block[<span class="string">"type"</span>] == <span class="string">"shortcut"</span>:</span><br><span class="line">                from_layer = int(block[<span class="string">"from"</span>])</span><br><span class="line">                activation = block[<span class="string">"activation"</span>]</span><br><span class="line">                <span class="comment">#convert negative annotation to positive annotation</span></span><br><span class="line">                from_layer = from_layer <span class="keyword">if</span> from_layer &gt; <span class="number">0</span> <span class="keyword">else</span> from_layer + index</span><br><span class="line">                x1 = outputs[str(from_layer)]</span><br><span class="line">                x2 = outputs[str(index<span class="number">-1</span>)]</span><br><span class="line">                <span class="comment">#like residual block</span></span><br><span class="line">                x = x1 + x2</span><br><span class="line">                outputs[str(index)] = x</span><br><span class="line">                <span class="comment">#<span class="doctag">TODO:</span>What about the activation???</span></span><br><span class="line">            <span class="keyword">elif</span> block[<span class="string">"type"</span>] == <span class="string">"yolo"</span>:</span><br><span class="line">                img_dim = x.shape[<span class="number">2</span>]</span><br><span class="line">                x, layer_loss = self.module_list[index][<span class="number">0</span>](x, targets, img_dim)</span><br><span class="line">                loss += layer_loss</span><br><span class="line">                yolo_outputs.append(x)</span><br><span class="line">                outputs[str(index)] = x</span><br><span class="line">        yolo_outputs = to_cpu(torch.cat(yolo_outputs, <span class="number">1</span>))</span><br><span class="line">        <span class="keyword">return</span> yolo_outputs <span class="keyword">if</span> targets <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> (loss, yolo_outputs)</span><br></pre></td></tr></table></figure>
+
+<p>还记得我们为<code>shortcut</code>层和<code>route</code>层创建的<code>EmptyLayer</code>吗？它们的功能直接写在<code>Darknet</code>的<code>forward</code>函数中了。</p>
+<p>注：本篇笔记参考、摘录了如下资料</p>
+<p><a href="https://zhuanlan.zhihu.com/p/36899263" target="_blank" rel="noopener">从零开始实现YOLO v3</a></p>
+<p><a href="https://github.com/eriklindernoren/PyTorch-YOLOv3" target="_blank" rel="noopener">eriklindernoren / PyTorch-YOLOv3</a></p>
+
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/03/20/test/">test</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Liu Hanzhang | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

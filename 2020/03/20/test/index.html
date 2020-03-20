@@ -149,7 +149,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">February 6, 2020&nbsp;&nbsp;17:04:08</a>
+                        Date: <a href="#">March 20, 2020&nbsp;&nbsp;21:16:33</a>
                         </span>
                     
                     
@@ -165,7 +165,11 @@
         </header>
 
         <div class="post-content">
-            <p><span style="background-color:#FFFF00;">文字</span></p>
+            <ol>
+<li>$1_i^{\rm obj}$值为1或0，表示训练样本的网格$i$中是否存在物体。$1_{ij}^{\rm obj}$值为1或0，表示网格$i$的Bounding Box $j$是否对预测“负责”(responsible)，即是否是与Ground Truth IoU最大的那一个.</li>
+<li>$\hat{C}_i$是预测的置信度。当训练样本的网格$i$不含有物体时，$C_i = 0$；当含有物体时，$C_i$为”负责的”预测框与Ground Truth的IoU.</li>
+<li>$\hat{p}_i(c)$是预测的每个类别的概率。当$c$是训练样本网格$i$的真实类别时，$p_i(c) = 1$; 对其他$c$，$p_i(c) = 0$.</li>
+</ol>
 
         </div>
 
@@ -185,10 +189,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/02/07/Berkeley-CS61c/">Berkeley CS61c</a>
+                <a class="prev" rel="prev" href="/2020/03/20/YOLOv3%E5%AE%9E%E7%8E%B0/">YOLOv3实现</a>
             
             
-            <a class="next" rel="next" href="/2020/02/06/Stanford-CS231n/">Stanford CS231n</a>
+            <a class="next" rel="next" href="/2020/03/20/YOLO/">YOLO</a>
             
         </section>
 
