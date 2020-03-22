@@ -233,7 +233,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[local]</span><br><span class="line">size&#x3D;3</span><br><span class="line">stride&#x3D;1</span><br><span class="line">pad&#x3D;1</span><br><span class="line">filters&#x3D;256</span><br><span class="line">activation&#x3D;leaky</span><br></pre></td></tr></table></figure>
 
 <p>本地连接层(locally connected laeyer)可以看作没有权重共享的卷积层。在卷积层中我们对每个位置都点乘了相同的filter，本地连接层对每个位置点乘不同的filter(即不共享权重)。比如输入维度是$7\times 7\times 1024$，如果是卷积层，输出维度应为</p>
-<p>$$<br>{\rm output_dim}=\frac{ {\rm input_dim}+2\times{\rm pad}-{\rm kernel_size} } { {\rm stride} }+1<br>= 7<br>$$</p>
+<p>$$<br>{\rm output\_dim}=\frac{ {\rm input\_dim}+2\times{\rm pad}-{\rm kernel\_size} } { {\rm stride} }+1<br>= 7<br>$$</p>
 <p>$7\times 7\times 256 = 12544$，与图中不符，可能是作者调整了某些参数。但该层是本地连接层，没有了权重共享，每一个滑动的位置都对应一个filter，因此共有</p>
 <p>
 $$
