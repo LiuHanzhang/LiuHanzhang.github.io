@@ -425,7 +425,7 @@
 <p>单精度的表示范围从</p>
 <p>$$<br>\pm 1.000\ 000\ 000\ 000\ 000\ 000\ 000\ 00_2 \times 2^{1-127}=\pm 2^{-126}\approx 1.175 \times 10^{-38}<br>$$</p>
 <p>到</p>
-<p>$$<br>\pm 1.111\ 111\ 111\ 111\ 111\ 111\ 111\ 11_2 \times 2^{254-126}\approx 2^{128}\approx3.403 \times 10^{38}<br>$$</p>
+<p>$$<br>\pm 1.111\ 111\ 111\ 111\ 111\ 111\ 111\ 11_2 \times 2^{254-127}\approx 2^{128}\approx3.403 \times 10^{38}<br>$$</p>
 <h1 id="RISC-V-vs-MIPS"><a href="#RISC-V-vs-MIPS" class="headerlink" title="RISC-V vs MIPS"></a>RISC-V vs MIPS</h1><blockquote>
 <p>我看到RISC V的指令第一印象可以概括为“像”。像什么呢？像MIPS（至少是在32位下）。指令的命名和功能很多都是一致的，能看懂MIPS汇编，RISC V汇编也能看个大概。通用寄存器的定义也是基本一致的，0号寄存器都是恒0源，其他的31个寄存器为通用寄存器。另外，RISC V的指令集编码里也有MIPS的影子，其Load指令funct3部分和MIPS同名指令的Opcode后三位编码完全一致。</p>
 <p>不过，再仔细看，又会发现RISC V的一些不同之处。</p>
@@ -433,10 +433,38 @@
 <p>此外，MIPS当年设计时，为了充分利用流水线，分支（Branch）指令带有一个延迟槽特性。这一特性在后来的发展中被证明意义不大，但为了保持兼容性还是传承了下来。RISC V的设计时间比较新，自然也摈弃了这一设计，指令更加简洁，</p>
 </blockquote>
 <p><a href="https://www.zhihu.com/question/28368960/answer/699535096" target="_blank" rel="noopener">https://www.zhihu.com/question/28368960/answer/699535096</a></p>
+<h1 id="Lecture-23-Instruction-Level-Parallelism"><a href="#Lecture-23-Instruction-Level-Parallelism" class="headerlink" title="Lecture 23: Instruction Level Parallelism"></a>Lecture 23: Instruction Level Parallelism</h1><h2 id="Increasing-Processor-Performance"><a href="#Increasing-Processor-Performance" class="headerlink" title="Increasing Processor Performance"></a>Increasing Processor Performance</h2><ol>
+<li><strong>Clock rate</strong></li>
+</ol>
+<ul>
+<li>Limited by technology and power dissipation</li>
+</ul>
+<ol start="2">
+<li><strong>Pipelining</strong></li>
+</ol>
+<ul>
+<li>“Overlap” instruction execution</li>
+<li>Deeper pipeline: 5 =&gt; 10 =&gt; 15 stages<ul>
+<li>Less work per stage ! shorter clock cycle</li>
+<li>But more potential for hazards (CPI &gt; 1)</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li><strong>Multiple Issue（多发射）</strong></li>
+</ol>
+<h2 id="Multiple-Issue"><a href="#Multiple-Issue" class="headerlink" title="Multiple Issue"></a>Multiple Issue</h2><h3 id="Static-Multiple-Issue"><a href="#Static-Multiple-Issue" class="headerlink" title="Static Multiple Issue"></a>Static Multiple Issue</h3><p>Static multiple-issue processors all use the compiler to assist with packaging instructions and handling hazards.</p>
+<p>Most static issue processors also rely on the compiler to take on some responsibility for handling data and control hazards. The compiler’s responsibilities may include static branch prediction and code scheduling to reduce or prevent all hazards.</p>
+<p>Static Multiple Issue’s original name: <span style="background-color:#FFFF00;">Very Long Instruction Word (VLIW).</span></p>
+<h3 id="Dynamic-Multiple-Issue-Superscalar"><a href="#Dynamic-Multiple-Issue-Superscalar" class="headerlink" title="Dynamic Multiple Issue (Superscalar)"></a>Dynamic Multiple Issue (Superscalar)</h3><p>In the simplest superscalar processors, instructions issue in order, and the processor decides whether zero, one, or more instructions can issue in a given clock cycle. Obviously, achieving good performance on such a processor still requires the compiler to try to schedule instructions to move dependences apart and thereby improve the instruction issue rate. Even with such compiler scheduling, <span style="background-color:#FFFF00;">there is an important difference between this simple superscalar and a VLIW processor</span>: the code, whether scheduled or not, is guaranteed by the hardware to execute correctly. Furthermore, compiled code will always run correctly independent of the issue rate or pipeline structure of the processor. In some VLIW designs, this has not been the case, and recompilation was required when moving across different processor models; in other static issue processors, code would run correctly across different implementations, but often so poorly as to make compilation effectively required.</p>
+<h4 id="Superscalar-Multicore"><a href="#Superscalar-Multicore" class="headerlink" title="Superscalar = Multicore?"></a>Superscalar = Multicore?</h4><ul>
+<li>A superscalar processor is a CPU that implements a form of parallelism called instruction-level parallelism within a single processor. In contrast to a scalar processor that can execute at most one single instruction per clock cycle, a superscalar processor can execute more than one instruction during a clock cycle by simultaneously dispatching multiple instructions to different execution units on the processor. It therefore allows for more throughput (the number of instructions that can be executed in a unit of time) than would otherwise be possible at a given clock rate. <span style="background-color:#FFFF00;">Each execution unit is not a separate processor (or a core if the processor is a multi-core processor), but an execution resource within a single CPU such as an arithmetic logic unit.</span></li>
+<li>In Flynn’s taxonomy, <span style="background-color:#FFFF00;">a single-core superscalar processor is classified as an SISD processor (Single Instruction stream, Single Data stream)</span>, though many superscalar processors support short vector operations and so could be classified as SIMD (Single Instruction stream, Multiple Data streams). A multicore superscalar processor is classified as an MIMD processor (Multiple Instruction streams, Multiple Data streams).</li>
+</ul>
 <h1 id="Lecture-24-Cache"><a href="#Lecture-24-Cache" class="headerlink" title="Lecture 24: Cache"></a>Lecture 24: Cache</h1><h2 id="Typical-Memory-Hierarchy"><a href="#Typical-Memory-Hierarchy" class="headerlink" title="Typical Memory Hierarchy"></a>Typical Memory Hierarchy</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200130130245255.png" class="">
 
 <h2 id="Memory-Hierarchy-Basis"><a href="#Memory-Hierarchy-Basis" class="headerlink" title="Memory Hierarchy Basis"></a>Memory Hierarchy Basis</h2><p>Cache contains copies of data in memory that are being used.</p>
-<p>Memory contains copies of data on disk that are<br>being used.</p>
+<p>Memory contains copies of data on disk that are being used.</p>
 <p>Caches work on the principles of temporal and spatial locality:</p>
 <ul>
 <li>Temporal Locality: If a memory location is referenced then it will tend to be referenced again soon =&gt; Keep most recently accessed data items closer to the processor</li>
@@ -465,21 +493,52 @@
 <p>- If block size is too big relative to cache size, then there are too few blocks (Result: miss rate goes up)</p>
 <img src="/2020/02/07/Berkeley-CS61c/image-20200130173825687.png" class="">
 
+<h2 id="Direct-Mapped-Cache"><a href="#Direct-Mapped-Cache" class="headerlink" title="Direct-Mapped Cache"></a>Direct-Mapped Cache</h2><h3 id="Terminology"><a href="#Terminology" class="headerlink" title="Terminology"></a>Terminology</h3><img src="image-20200704111640478.png" alt="image-20200704111640478" style="zoom: 25%;" />
+
+<p><strong>Index</strong></p>
+<p>Specifies the cache index (which “row”/block of the cache we should look in)</p>
+<p><strong>Offset</strong></p>
+<p>Once we’ve found correct block, specifies which byte within the block we want</p>
+<p><strong>Tag</strong></p>
+<p>The remaining bits after offset and index are determined; these are used to distinguish between all the memory addresses that map to the same location</p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>Suppose we have a 8byte of data in a direct-mapped cache with 2 byte blocks, determine the size of the tag, index and offset fields if we’re using a 32-bit architecture.</p>
+<p><strong>Offset</strong></p>
+<ul>
+<li>need to specify correct byte within a block</li>
+<li>block contains 2 bytes = $2^1$ bytes =&gt; need 1 bit to specify correct byte</li>
+</ul>
+<p><strong>Index: (~index into an “array of blocks”)</strong></p>
+<ul>
+<li>need to specify correct block in cache</li>
+<li>cache contains 8 B = $2^3$bytes</li>
+<li>block contains 2 B = $2^1$bytes</li>
+<li># blocks/cache = $\frac{\text{bytes/cache}}{\text{bytes/block}} = \frac{2^3 \text{bytes/cache}}{2^1 \text{bytes/block}}= 2^2$ # blocks/cache</li>
+<li>need 2 bits to specify this many blocks</li>
+</ul>
+<p><strong>Tag: use remaining bits as tag</strong></p>
+<ul>
+<li><p>tag length = addr length – offset - index  = 32 - 1 - 2 bits = 29 bits</p>
+</li>
+<li><p>so tag is leftmost 29 bits of memory address</p>
+</li>
+<li><p>Tag can be thought of as “cache number”</p>
+</li>
+</ul>
 <h2 id="Optimize-Goal"><a href="#Optimize-Goal" class="headerlink" title="Optimize Goal"></a>Optimize Goal</h2><p>Minimize: Average Memory Access Time</p>
 <p>= Hit Time + Miss Penalty × Miss Rate</p>
 <p><span style="background-color:#FFFF00;">Create the illusion of a memory that is large, cheap, and fast - on average</span></p>
-<h2 id="Hit-and-Miss-Policies"><a href="#Hit-and-Miss-Policies" class="headerlink" title="Hit and Miss Policies"></a>Hit and Miss Policies</h2><p>The <a href="https://venus.cs61c.org" target="_blank" rel="noopener">Venus</a> cache simulator currently simulates a <strong>write-through, write-allocate</strong> cache. Here’s a reminder about the three different cache hit policies you should know about:</p>
+<h2 id="Hit-and-Miss-Policies"><a href="#Hit-and-Miss-Policies" class="headerlink" title="Hit and Miss Policies"></a>Hit and Miss Policies</h2><p>The <a href="https://venus.cs61c.org" target="_blank" rel="noopener">Venus</a> cache simulator currently simulates a <strong>write-through, write-allocate</strong> cache. Here’s a reminder about the three different cache <span style="background-color:#FFFF00;">hit policies</span> you should know about:</p>
 <ul>
 <li><strong>Write-back</strong> means that on a write hit, data is written to the cache only, and when this write happens, the dirty bit for the block that was written becomes 1. Writing to the cache is fast, so write latency in write-back caches is usually quite small. However, when a block is evicted from a write-back cache, if the dirty bit is 1, memory must be updated with the contents of that block, as it contains changes that are not yet reflected in memory. This makes write-back caches more difficult to implement in hardware.</li>
 <li><strong>Write-through</strong> means that on a write hit, data is written to both the cache and main memory. Writing to the cache is fast, but writing to main memory is slow; this makes write latency in write-through caches slower than in a write-back cache. However, write-through caches mean simpler hardware, since we can assume in write-through caches that memory always has the most up-to-date data.</li>
 <li><strong>Write-around</strong> means that in every situation, data is written to main memory only; if we have the block we’re writing in the cache, the valid bit of the block is changed to invalid. Essentially, there is no such thing as a write hit in a write-around cache; a write “hit” does the same thing as a write miss.</li>
 </ul>
-<p>There are also two miss policies you should know about:</p>
+<p>There are also two <span style="background-color:#FFFF00;">miss policies</span> you should know about:</p>
 <ul>
 <li><strong>Write-allocate</strong> means that on a write miss, you pull the block you missed on into the cache. For write-back, write-allocate caches, this can mean that memory is never written to directly; instead, writes are always to the cache and memory is updated upon eviction.</li>
 <li><strong>No write-allocate</strong> means that on a write miss, you do not pull the block you missed on into the cache. Only memory is updated.</li>
 </ul>
-<p>Additionally, in this course, we talk about several replacement policies, in order from most useful to least useful (normally):</p>
+<p>Additionally, in this course, we talk about several <span style="background-color:#FFFF00;">replacement policies</span>, in order from most useful to least useful (normally):</p>
 <ul>
 <li><strong>LRU</strong> - Least recently used, when we decide to evict a cache block to make space, we select the block that has been used farthest back in time of all the other blocks.</li>
 <li><strong>Random</strong> - When we decide to evict a cache block to make space, we randomly select one of the blocks in the cache to evict.</li>
@@ -493,6 +552,7 @@
 <h1 id="Lecture-27-Virtual-Memory"><a href="#Lecture-27-Virtual-Memory" class="headerlink" title="Lecture 27: Virtual Memory"></a>Lecture 27: Virtual Memory</h1><h2 id="Another-View-of-the-Memory-Hierarchy"><a href="#Another-View-of-the-Memory-Hierarchy" class="headerlink" title="Another View of the Memory Hierarchy"></a>Another View of the Memory Hierarchy</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200131194313741.jpg" class="">
 
 <p><span style="background-color:#FFFF00;">VM系统和Cache系统在地址表示方式上的区别：后者是通过引入Cache提高DRAM的访问速度，因此地址是用的是低一级存储DRAM的地址；而前者是通过辅助存储器增大DRAM的容量（目的之一），因此地址用的是高一级存储DRAM的地址。（不是很确定）</span></p>
+<p>虚拟存储器实际上相当于全相联cache+页表。</p>
 <h2 id="Virtual-vs-Physical-Address"><a href="#Virtual-vs-Physical-Address" class="headerlink" title="Virtual vs. Physical Address"></a>Virtual vs. Physical Address</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200201110733386.png" class="">
 
 <ul>
