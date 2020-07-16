@@ -457,10 +457,13 @@
 <p>Most static issue processors also rely on the compiler to take on some responsibility for handling data and control hazards. The compiler’s responsibilities may include static branch prediction and code scheduling to reduce or prevent all hazards.</p>
 <p>Static Multiple Issue’s original name: <span style="background-color:#FFFF00;">Very Long Instruction Word (VLIW).</span></p>
 <h3 id="Dynamic-Multiple-Issue-Superscalar"><a href="#Dynamic-Multiple-Issue-Superscalar" class="headerlink" title="Dynamic Multiple Issue (Superscalar)"></a>Dynamic Multiple Issue (Superscalar)</h3><p>In the simplest superscalar processors, instructions issue in order, and the processor decides whether zero, one, or more instructions can issue in a given clock cycle. Obviously, achieving good performance on such a processor still requires the compiler to try to schedule instructions to move dependences apart and thereby improve the instruction issue rate. Even with such compiler scheduling, <span style="background-color:#FFFF00;">there is an important difference between this simple superscalar and a VLIW processor</span>: the code, whether scheduled or not, is guaranteed by the hardware to execute correctly. Furthermore, compiled code will always run correctly independent of the issue rate or pipeline structure of the processor. In some VLIW designs, this has not been the case, and recompilation was required when moving across different processor models; in other static issue processors, code would run correctly across different implementations, but often so poorly as to make compilation effectively required.</p>
-<h4 id="Superscalar-Multicore"><a href="#Superscalar-Multicore" class="headerlink" title="Superscalar = Multicore?"></a>Superscalar = Multicore?</h4><ul>
+<h4 id="Superscalar-Multicore"><a href="#Superscalar-Multicore" class="headerlink" title="Superscalar = Multicore?"></a>Superscalar = Multicore?</h4><blockquote>
+<ul>
 <li>A superscalar processor is a CPU that implements a form of parallelism called instruction-level parallelism within a single processor. In contrast to a scalar processor that can execute at most one single instruction per clock cycle, a superscalar processor can execute more than one instruction during a clock cycle by simultaneously dispatching multiple instructions to different execution units on the processor. It therefore allows for more throughput (the number of instructions that can be executed in a unit of time) than would otherwise be possible at a given clock rate. <span style="background-color:#FFFF00;">Each execution unit is not a separate processor (or a core if the processor is a multi-core processor), but an execution resource within a single CPU such as an arithmetic logic unit.</span></li>
 <li>In Flynn’s taxonomy, <span style="background-color:#FFFF00;">a single-core superscalar processor is classified as an SISD processor (Single Instruction stream, Single Data stream)</span>, though many superscalar processors support short vector operations and so could be classified as SIMD (Single Instruction stream, Multiple Data streams). A multicore superscalar processor is classified as an MIMD processor (Multiple Instruction streams, Multiple Data streams).</li>
 </ul>
+<p><a href="https://en.wikipedia.org/wiki/Superscalar_processor" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Superscalar_processor</a></p>
+</blockquote>
 <h1 id="Lecture-24-Cache"><a href="#Lecture-24-Cache" class="headerlink" title="Lecture 24: Cache"></a>Lecture 24: Cache</h1><h2 id="Typical-Memory-Hierarchy"><a href="#Typical-Memory-Hierarchy" class="headerlink" title="Typical Memory Hierarchy"></a>Typical Memory Hierarchy</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200130130245255.png" class="">
 
 <h2 id="Memory-Hierarchy-Basis"><a href="#Memory-Hierarchy-Basis" class="headerlink" title="Memory Hierarchy Basis"></a>Memory Hierarchy Basis</h2><p>Cache contains copies of data in memory that are being used.</p>
@@ -674,8 +677,33 @@
 <li><p>TLBs can have associativity (usually fully/highly associative)</p>
 </li>
 </ul>
-<h1 id="Lecture-31-Thread-Level-Parallelism"><a href="#Lecture-31-Thread-Level-Parallelism" class="headerlink" title="Lecture 31: Thread-Level Parallelism"></a>Lecture 31: Thread-Level Parallelism</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>SIMD, MIMD, Multi-Core, 指令级并行(instruction-level parallelism), 超标量… 有什么联系？</p>
-<h2 id="Multi-Core-Model"><a href="#Multi-Core-Model" class="headerlink" title="Multi-Core Model"></a>Multi-Core Model</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200203152153835.png" class="">
+<h1 id="Lecture-30-Parallelism-Taxonomy"><a href="#Lecture-30-Parallelism-Taxonomy" class="headerlink" title="Lecture 30: Parallelism Taxonomy"></a>Lecture 30: Parallelism Taxonomy</h1><h2 id="Parallelism-Level"><a href="#Parallelism-Level" class="headerlink" title="Parallelism Level"></a>Parallelism Level</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200118191847346.png" class="">
+
+<h2 id="Flynn’s-Taxonomy"><a href="#Flynn’s-Taxonomy" class="headerlink" title="Flynn’s Taxonomy"></a>Flynn’s Taxonomy</h2><p>Flynn’s Taxonomy is for parallel hardware.</p>
+<img src="/2020/02/07/Berkeley-CS61c/image-20200711161037933.png" class="">
+
+<h2 id="SIMD"><a href="#SIMD" class="headerlink" title="SIMD"></a>SIMD</h2><h3 id="Subword-Parallelism"><a href="#Subword-Parallelism" class="headerlink" title="Subword Parallelism"></a>Subword Parallelism</h3><p>It is also classified under the more general name of data level parallelism.</p>
+<p>See <em><a href="https://booksite.elsevier.com/9780124077263/index.php" target="_blank" rel="noopener">Computer Organization and Design</a></em> section 3.6 for details.</p>
+<p><strong>Real Stuff:</strong> x86 MMX(MultiMedia eXtension) and SSE(Streaming SIMD Extension)</p>
+<h3 id="Vector-Architecture"><a href="#Vector-Architecture" class="headerlink" title="Vector Architecture"></a>Vector Architecture</h3><p>See <em><a href="https://booksite.elsevier.com/9780124077263/index.php" target="_blank" rel="noopener">Computer Organization and Design</a></em> section 6.3 for details.</p>
+<blockquote>
+<p>在了解了向量体系结构如此多的优点之后，为何向量机却没有在高性能计算领域之外流行呢？主要原因包括：向量寄存器的巨大状态增加了上下文切换时间；向量存取产生的缺页故障难以处理；SIMD指令(MMX, SSE, AVX)也可以获得向量指令的部分优势。另外，只要指令级并行可以提供摩尔定律要求的性能提升，就没有理由要去改变体系结构的类型。</p>
+</blockquote>
+<h2 id="Instruction-Level-Parallelism-ILP"><a href="#Instruction-Level-Parallelism-ILP" class="headerlink" title="Instruction Level Parallelism (ILP)"></a>Instruction Level Parallelism (ILP)</h2><p>See <em><a href="https://booksite.elsevier.com/9780124077263/index.php" target="_blank" rel="noopener">Computer Organization and Design</a></em> section 4.10 and <a href="#Lecture-23-Instruction-Level-Parallelism">notes</a> for details.</p>
+<img src="/2020/02/07/Berkeley-CS61c/%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%B9%B6%E8%A1%8C.svg" class="">
+
+<blockquote>
+<p>In Flynn’s taxonomy, <span style="background-color:#FFFF00;">a single-core superscalar processor is classified as an SISD processor (Single Instruction stream, Single Data stream)</span>, though many superscalar processors support short vector operations and so could be classified as SIMD (Single Instruction stream, Multiple Data streams). A multicore superscalar processor is classified as an MIMD processor (Multiple Instruction streams, Multiple Data streams).</p>
+<p><a href="https://en.wikipedia.org/wiki/Superscalar_processor" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Superscalar_processor</a></p>
+</blockquote>
+<blockquote>
+<p>SIMD is NOT a form of instruction-level parallelism. Instruction-level parallelism deals with performing multiple instructions inparallel, i.e.  pipelining.  SIMD is a form of data parallelism with a single instruction performing operation on multiple streams of data.</p>
+<p><a href="https://cs61c.org/sp20/disc/?file=disc12_sol.pdf" target="_blank" rel="noopener">https://cs61c.org/sp20/disc/?file=disc12_sol.pdf</a></p>
+</blockquote>
+<h2 id="MIMD-Thread-Level-Parallelism"><a href="#MIMD-Thread-Level-Parallelism" class="headerlink" title="MIMD: Thread Level Parallelism"></a>MIMD: Thread Level Parallelism</h2><p>See <em><a href="https://booksite.elsevier.com/9780124077263/index.php" target="_blank" rel="noopener">Computer Organization and Design</a></em> section 6.4 for details.</p>
+<p>从程序员的角度看，硬件多线程是一个和MIMD相关的概念。</p>
+<p><strong>同时多线程</strong>(Simultaneous MultiThreading, SMT)是<strong>硬件多线程</strong>(Hardware Multithreading)的一个变种，它使用多发射动态调度流水线处理器的资源来挖掘线程级并行。</p>
+<h1 id="Lecture-31-Thread-Level-Parallelism"><a href="#Lecture-31-Thread-Level-Parallelism" class="headerlink" title="Lecture 31: Thread-Level Parallelism"></a>Lecture 31: Thread-Level Parallelism</h1><h2 id="Multi-Core-Model"><a href="#Multi-Core-Model" class="headerlink" title="Multi-Core Model"></a>Multi-Core Model</h2><img src="/2020/02/07/Berkeley-CS61c/image-20200203152153835.png" class="">
 
 <ul>
 <li>Each core executes its own instructions</li>
@@ -693,9 +721,10 @@
 <h2 id="Threads"><a href="#Threads" class="headerlink" title="Threads"></a>Threads</h2><ul>
 <li>Sequential flow of instructions that performs some task</li>
 <li>Each thread has:<ul>
-<li>Dedicated program counter</li>
-<li>Separate registers</li>
+<li><span style="background-color:#FFFF00;">Dedicated program counter</span></li>
+<li><span style="background-color:#FFFF00;">Separate registers</span></li>
 <li>Access the shared memory</li>
+<li>Share datapath, ALU(s), caches <font color = purple>datapaht and ALU? Really?</font></li>
 </ul>
 </li>
 <li>Each physical core provides one (or more)<ul>
@@ -709,6 +738,27 @@
 </ul>
 </li>
 </ul>
+<h3 id="Hardware-threads-cores-and-software-threads"><a href="#Hardware-threads-cores-and-software-threads" class="headerlink" title="Hardware threads, cores and software threads"></a>Hardware threads, cores and software threads</h3><blockquote>
+<p>首先，关于计算机系统的很多概念，都有“逻辑层” 和 “物理层”的区分，这个是前提。</p>
+<p>然后再看，“核心”这个概念是“物理层”的概念，指的就是 CPU硬件的物理核心数量。</p>
+<p>而“线程” 这个概念，是“逻辑层”的概念，而且这个“逻辑层”的概念，还要区分是 “CPU逻辑层” 还是 “操作系统OS逻辑层”。</p>
+<p>先说 “CPU逻辑层” 的 线程。Intel 在CPU上搞出了HT技术（Hyper Threading），也叫超线程技术。这个技术简单来说，就Intel 把一个CPU核心上，搞出了两个处理的流水线，在使用的时候可以当成两个来用。而他们把这每一个核心分出来的两个流水线，叫做“线程”。这也就是 4核心8线程的意思。从上层逻辑上来看，完全可以把它当作是个8核心的CPU。</p>
+<p>再说  “操作系统OS逻辑层”的线程。操作系统把把处理单元称为“进程”，然后在每一个进程里面开辟了粒度更细的“线程”，这个“线程”是运行在某个进程中的处理调度单元，是由操作系统提供的虚拟的概念。因为是虚拟出来的，所以操作系统层面来说，“线程”可以创建很多个，而不局限于CPU层面的那个“8个线程”。</p>
+<p><a href="https://www.zhihu.com/question/288855001/answer/952710065" target="_blank" rel="noopener">https://www.zhihu.com/question/288855001/answer/952710065</a></p>
+</blockquote>
+<blockquote>
+<p>CPU中的线程和操作系统（OS）中的线程即不同，在调度的时候又有些关联。</p>
+<p>CPU中的Thread</p>
+<p>CPU中的线程，我们叫它们Thread，和OS中的线程的名字一样。它来自同步多线程（SMT，Simultaneous Multi-threading）的概念。我们现在在Intel的CPU上看到它，实际上这并不是Intel的发明创造。它最早起源于学术圈，在硬件上IBM实现也比Intel早。最早Intel使用了这种技术时候就叫做SMT，但后面改叫做HT (Hyper Threading)，可能是这样更清楚（毕竟最多两个thread，比IBM怪物要少），更朗朗上口吧。</p>
+<p>我们现在看到CPU，很多都支持HT，经常看到的2C4T的意思就是2核4线程（T，Thread）。1个内核中的thread是对称的和对等的，在软件上没有任何区别，BIOS也只有通过一些特殊手段才能区分。实际上，2C4T中的4个thread调度起来没有本质区别，它们都有自己单独的身份证号码：APIC ID。调度起来只要知道别人的APIC ID，就用自己的Local APIC寄存器发出两个IPI（Inter-Processor Interrupts）就好了，那个被指明的倒霉蛋就莫名其妙的开始被调度去指定的地址执行指令了（尽管是实模式）。当然也可以广播IPI让所有别的thread都去执行指定任务。</p>
+<p>实际上CPU中Thead有多少，操作系统并不自己探测，是BIOS通过ACPI报告给OS的，那么BIOS是怎么知道有多少个Thread呢？就是通过广播IPI让各个thread自己来签到的，是不是很简单？</p>
+<p>操作系统中的Thread</p>
+<p>OS中的Thread有自己的栈空间，和同一进程中的其他线程共享地址空间等等，这些基本知识因为广为人所知，这里就不罗嗦了。</p>
+<p>此Thread非彼Thread</p>
+<p>操作系统中的进程可以很多，进程中的线程就更多了，常常有几十个上百个。而CPU的Thread就那么固定几个，是稀缺资源。两者都叫Thread是因为他们都是调度的基本单位，软件操作系统调度的基本单位是OS的Thread，硬件的调度基本单位是CPU中的Thread。操作系统负责把它产生的软Thread调度到CPU中的硬Thread中去。一软一硬，干活不累！</p>
+<p><a href="https://www.zhihu.com/question/27406575/answer/611317734" target="_blank" rel="noopener">https://www.zhihu.com/question/27406575/answer/611317734</a></p>
+</blockquote>
+<p><font color = purple>超线程是如何实现的？是动态多发射吗？每一个线程都有自己的PC？</font></p>
 <h3 id="Operating-System-Threads"><a href="#Operating-System-Threads" class="headerlink" title="Operating System Threads"></a>Operating System Threads</h3><p>Give illusion of many “simultaneously” activate threads</p>
 <ol>
 <li><p>Multiplex software threads onto hardware threads:</p>
